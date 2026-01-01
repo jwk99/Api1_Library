@@ -1,0 +1,97 @@
+﻿@baseUrl = https://localhost:7135
+###Members
+
+###GET all members
+GET {{baseUrl}}/api/members
+Accept: application/json
+
+###Create member (correct)
+POST {{baseUrl}}/api/members
+Content-Type: application/json
+{
+  "Name": "Adam Testowy",
+  "Email": "adam@test.pl"
+} 
+
+###Create member (error duplicate email)
+POST {{baseUrl}}/api/members
+Content-Type: application/json
+{
+  "Name": "Wojtek Testowy",
+  "Email": "adam@test.pl"
+} 
+
+###Books
+
+### Get all books (with available copies)
+GET {{baseUrl}}/api/books
+Accept: application/json
+
+### Create book (correct)
+POST {{baseUrl}}/api/books
+Content-Type:application/json
+{
+  "title":"Clash of Kings",
+  "author":"G.R.R. Martin",
+  "copies":9,
+  "available":9
+}
+### Create book (invalid no. of copies)
+POST {{baseUrl}}/api/books
+Content-Type:application/json
+{
+  "title":"Wrong book",
+  "author":"W. Author",
+  "copies":-5,
+  "available":0
+}
+
+### Loans
+
+###Add a test book
+POST {{baseUrl}}/api/books
+Content-Type:application/json
+{
+  "title":"Test book",
+  "author":"T. Author",
+  "copies":1,
+  "available":1
+}
+### Get all loans
+GET {{baseUrl}}/api/loans
+Accept: application/json
+
+### Create a loan
+POST {{baseUrl}}/api/loans/borrow
+Content-Type:application/json
+{
+  "memberId":3,
+  "bookId":6,
+  "days":7
+}
+
+### Create a loan (error, no copies available)
+POST {{baseUrl}}/api/loans/borrow
+Content-Type:application/json
+{
+  "memberId":2,
+  "bookId":6,
+  "days":14
+}
+### Create a loan (error, wrong memberId)
+POST {{baseUrl}}/api/loans/borrow
+Content-Type:application/json
+{
+  "memberId":22,
+  "bookId":4,
+  "days":14
+}
+### Return a loan
+POST {{baseUrl}}/api/loans/return?loanId=3
+
+### Return a returned loan
+POST {{baseUrl}}/api/loans/return?loanId=3
+
+### Return a non-existing loan
+POST {{baseUrl}}/api/loans/return?loanId=32
+
